@@ -16,5 +16,8 @@ public class AppTest
     public void shouldAnswerWithTrue()
     {
         assertTrue(true);
+        // TODO need to add tests
+        App app = new App();
+//        app.
     }
 }
