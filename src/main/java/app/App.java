@@ -11,12 +11,10 @@ import java.net.Inet4Address;
 /**
  * This application start counting unique IP Addresses from a file. Path to the file get from the first argument,
  * also can enable validate syntax the IP Addresses from the file using the second argument.
- *
- * @throws IOException when have problem with access to the file
  */
 public class App
 {
-    public static void main( String[] args ) throws IOException {
+    public static void main( String[] args ) {
 
         int lengthArgs = args.length;
         if (lengthArgs < 1 || lengthArgs > 2) {
@@ -32,8 +30,13 @@ public class App
             validateTrue = Boolean.parseBoolean(args[1]);
 
         long start = System.currentTimeMillis();
-        System.out.println("Distinct IP Addresses: "
-                + getCountIPAddressFromFileByBitSet(sourceFileName, validateTrue));
+        try {
+            System.out.println("Distinct IP Addresses: "
+                    + getCountIPAddressFromFileByBitSet(sourceFileName, validateTrue));
+        } catch (IOException e) {
+            System.out.println("Couldn't have access to the file or the file not exist.");
+        }
+
         System.out.println("Time spent: " + (System.currentTimeMillis() - start) / 1000 + "s") ;
     }
 
@@ -43,7 +46,7 @@ public class App
      * @param validateTrue enable or disable validating IP address
      * @throws IOException when have problem with access to the file
      */
-    private static int getCountIPAddressFromFileByBitSet(String path, boolean validateTrue) throws IOException {
+    public static int getCountIPAddressFromFileByBitSet(String path, boolean validateTrue) throws IOException {
         IPCounter counter = new IPCounter();
         BufferedReader reader = Files.newBufferedReader(Paths.get(path));
         String ipAddress;

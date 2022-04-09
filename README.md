@@ -1,6 +1,8 @@
 # IP-Addr-Counter
 
-Дан простой текстовый файл с IPv4 адресами. Одна строка – один адрес, примерно так:
+## Task
+
+Have a file with IPv4 Addresses, one line - one IP, something like this:
 
 ```
 145.67.23.4
@@ -11,17 +13,32 @@
 ...
 ```
 
-Файл в размере не ограничен и может занимать десятки и сотни гигабайт.
+The file could have a lot of IP and have size 10 and 100 Gb.
 
-- Необходимо посчитать количество уникальных адресов в этом файле, затратив как можно меньше памяти и времени.
-- Консольное приложение, которое на вход получает путь к файлу, а на выходе показывает количество уникальных айпишников. Ввод пути на ваше усмотрение
-(через аргументы командной строки или через System.in)
+- Need to count number unique IP Addresses in the file spend a few memory and time.
+- This need to be console application could get argument with path to the file with IP, in the end of the application can show count if the IP.
+  (can use argument with path to file or use System.in)
 
-Немного деталей:
-- Использовать можно только возможности стандартной библиотеки Java/Kotlin
-- Писать нужно на Java (версия 11 и выше) или Kotlin.
-- В задании должен быть рабочий метод main(), это должно быть готовое приложение, а не просто библиотека
-- Сделанное задание необходимо разместить на GitHub
-- Существует "наивный" алгоритм решения данной задачи (читаем строка за строкой, кладем строки в HashSet), желательно чтобы ваша реализация была лучше этого простого, наивного алгоритма.
+Details:
+- Have to use standard library of Java/Kotlin;
+- Use Java 11 or higher or Kotlin;
+- The application have to use method main() and this must be ready application not just library;
+- The application must be published on GitHub.
+
+To check your solution can use the big file with IP Addresses [file](https://ecwid-vgv-storage.s3.eu-central-1.amazonaws.com/ip_addresses.zip). Attention the archive size 20Gb after unarchive in 120Gb.
+
 ---
-Прежде чем отправить задание, имеет смысл проверить его вот на этом [файле](https://ecwid-vgv-storage.s3.eu-central-1.amazonaws.com/ip_addresses.zip). Внимание – файл весит около 20Gb, а распаковывается приблизительно в 120Gb.
+## The solution
+
+The main idea use BitSet way to mark a bit index as used. The file will be read line by line and every IP Address will be converted to number. Next the number will be used to mark a bit in the BitSet.
+
+Details:
+1. Couldn't put all text with IP Addresses from file to memory, so need to read line by line.
+2. Couldn't save all IP Address from file to HashSet, because get problem OutOfMemory, so try to use another way - BitSet where can mark bit index as used and at the end count number used bit index.
+3. Couldn't put String with IP Address to BitSet, so need to convert to Integer.
+4. The main way converting IP Address to Integer is use formula 192.168.1.1 = (192 * 256^3) + (168 * 256^2) + (1 * 256^1) + (1 * 256^0), and because the number could be more than Integer.MAX_VALUE, so the first step converting can use Long type.
+5. After converting IP Address String to Long get some of them a few Integer.MAX_VALUE others more Integer.MAX_VALUE, and when will convert from Long to Integer can lose some date, so create two BitSet for these scenarios and for the second will minus Integer.MAX_VALUE from converted IP Address.
+6. Because 255.255.255.255 after converting to Long and Integer and minus Integer.MAX_VALUE equals Integer.MAX_VALUE, so from this number will be minus 1.
+
+## How to start
+
