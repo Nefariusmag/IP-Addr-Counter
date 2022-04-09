@@ -41,7 +41,8 @@ public class App
     }
 
     /**
-     * Get count IP address from file using BitSet
+     * Get count IP address from file using BitSet.
+     *
      * @param path need get full path to file with IP addresses
      * @param validateTrue enable or disable validating IP address
      * @throws IOException when have problem with access to the file
@@ -51,9 +52,11 @@ public class App
         BufferedReader reader = Files.newBufferedReader(Paths.get(path));
         String ipAddress;
         int countSkippedLines = 0;
+        int countWrongIPAddresses = 0;
         while ((ipAddress = reader.readLine()) != null) {
             if (validateTrue) {
                 if (!thisIsTrueIPAddress(ipAddress)) {
+                    countWrongIPAddresses++;
                     continue;
                 }
             }
@@ -64,13 +67,17 @@ public class App
             }
         }
         if (countSkippedLines != 0) {
-            System.out.println("Skipped lines: " + countSkippedLines);
+            System.out.println("Number lines couldn't be parsed: " + countSkippedLines);
+        }
+        if (countWrongIPAddresses != 0) {
+            System.out.println("Number wrong IP Addresses: " + countWrongIPAddresses);
         }
         return counter.count();
     }
 
     /**
-     * Validate IP address is true or not
+     * Validate IP address is true or not.
+     *
      * @param IPAddress the one IP address want to check
      * @return the IP address is true or not
      */

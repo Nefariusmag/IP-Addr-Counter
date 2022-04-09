@@ -42,3 +42,12 @@ Details:
 
 ## How to start
 
+1. Install Java 11 and higher and Maven 3; 
+2. Build the project use:
+```shell
+mvn package
+```
+3. Start the application:
+```shell
+java -jar target/app-1.0.1.jar <path to your file with IP Addresses> <True/False enable or disable validate line in the file> 
+```
