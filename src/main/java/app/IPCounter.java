@@ -10,6 +10,20 @@ public class IPCounter {
     private final BitSet theSecondSet;
 
     /**
+     * Getter to get value of the First Set
+     */
+    public BitSet getTheFirstSet() {
+        return theFirstSet;
+    }
+
+    /**
+     * Getter to get value of the Second Set
+     */
+    public BitSet getTheSecondSet() {
+        return theSecondSet;
+    }
+
+    /**
      * When create object this class create two BitSet with max value of Integer.
      */
     public IPCounter() {
