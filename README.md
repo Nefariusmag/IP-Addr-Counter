@@ -49,5 +49,5 @@ mvn package
 ```
 3. Start the application:
 ```shell
-java -jar target/app-1.0.1.jar <path to your file with IP Addresses> <True/False enable or disable validate line from the file, default is False> 
+java -jar target/ipcounter-1.0.1.jar <path to your file with IP Addresses> <True/False enable or disable validate line from the file, default is False> 
 ```

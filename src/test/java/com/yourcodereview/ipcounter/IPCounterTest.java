@@ -1,4 +1,4 @@
-package app;
+package com.yourcodereview.ipcounter;
 
 import org.junit.jupiter.api.Test;
 
@@ -38,7 +38,7 @@ public class IPCounterTest {
         ipCounter.add("1.1.1.1");
         ipCounter.add("1.1.1.2");
         assertEquals(ipCounter.count(),
-                (ipCounter.getTheFirstSet().cardinality() + ipCounter.getTheSecondSet().cardinality()));
+                (ipCounter.getTheFirstSetSize() + ipCounter.getTheSecondSetSize()));
     }
 
     /**
@@ -48,9 +48,10 @@ public class IPCounterTest {
     void IPSaveToCorrectSetTest() {
         IPCounter ipCounter = new IPCounter();
         ipCounter.add("1.1.1.1");
+        ipCounter.add("0.0.0.0");
         ipCounter.add("255.255.255.254");
         ipCounter.add("255.255.255.255");
-        assertEquals(1, ipCounter.getTheFirstSet().cardinality());
-        assertEquals(2, ipCounter.getTheSecondSet().cardinality());
+        assertEquals(2, ipCounter.getTheFirstSetSize());
+        assertEquals(2, ipCounter.getTheSecondSetSize());
     }
 }

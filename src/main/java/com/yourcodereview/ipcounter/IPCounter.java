@@ -1,4 +1,4 @@
-package app;
+package com.yourcodereview.ipcounter;
 
 import java.util.BitSet;
 
@@ -12,15 +12,15 @@ public class IPCounter {
     /**
      * Getter to get value of the First Set
      */
-    public BitSet getTheFirstSet() {
-        return theFirstSet;
+    public int getTheFirstSetSize() {
+        return theFirstSet.cardinality();
     }
 
     /**
      * Getter to get value of the Second Set
      */
-    public BitSet getTheSecondSet() {
-        return theSecondSet;
+    public int getTheSecondSetSize() {
+        return theSecondSet.cardinality();
     }
 
     /**
@@ -38,20 +38,20 @@ public class IPCounter {
      * but if the number is more Integer Max Value then put to the second Set.
      * When try to put the same IP Address to the Sets, the BitSet can see that the bit index marked like used.
      *
-     * @param IPAddress IP Address that want to add
+     * @param ipAddress IP Address that want to add
      * @throws NumberFormatException when came IP has letters
      * @throws ArrayIndexOutOfBoundsException when came IP is not x.x.x.x
      */
-    public void add(String IPAddress) throws NumberFormatException, ArrayIndexOutOfBoundsException {
-        long IPAddressAsLong = getIPAddressAsLong(IPAddress);
+    public void add(String ipAddress) throws NumberFormatException, ArrayIndexOutOfBoundsException {
+        long ipAddressAsLong = getIPAddressAsLong(ipAddress);
         /*
         Because IP Address converted to integer could be more Integer.MAX_VALUE so use two BitSet.
         when number is lower that Integer.MAX_VALUE when the number saved to theFirstSet, others to theSecondSet
          */
-        if (IPAddressAsLong < Integer.MAX_VALUE) {
-            theFirstSet.set((int) IPAddressAsLong);
+        if (ipAddressAsLong < Integer.MAX_VALUE) {
+            theFirstSet.set((int) ipAddressAsLong);
         } else {
-            int bitIndex = (int) (IPAddressAsLong - Integer.MAX_VALUE);
+            int bitIndex = (int) (ipAddressAsLong - Integer.MAX_VALUE);
             /*
             When IP address is 255.255.255.255 get problem with IndexOutOfBoundsException
             so use little hack with change number index.
@@ -66,19 +66,20 @@ public class IPCounter {
      * starting with 0. Here is an example using this formula:
      * 192.168.1.1 = (192 * 256^3) + (168 * 256^2) + (1 * 256^1) + (1 * 256^0)
      *
-     * @param IPAddress IP Address
+     * @param ipAddress IP Address
      * @return uniq convert IP Address to long
      * @throws NumberFormatException when came IP has letters
      * @throws ArrayIndexOutOfBoundsException when came IP is not x.x.x.x
      */
-    private long getIPAddressAsLong(String IPAddress) throws NumberFormatException, ArrayIndexOutOfBoundsException {
-        long IPAddressAsLong = 0;
-        String[] partsIPAddress = IPAddress.split("\\.");
-        for (int numberPartIPAddress = 0; numberPartIPAddress < 4; numberPartIPAddress++) {
+    private long getIPAddressAsLong(String ipAddress) throws NumberFormatException, ArrayIndexOutOfBoundsException {
+        final int NUMBER_PARTS_IP_BETWEEN_DOTS = 4;
+        long ipAddressAsLong = 0;
+        String[] partsIPAddress = ipAddress.split("\\.");
+        for (int numberPartIPAddress = 0; numberPartIPAddress < NUMBER_PARTS_IP_BETWEEN_DOTS; numberPartIPAddress++) {
             int partIPAddressAsInt = Integer.parseInt(partsIPAddress[numberPartIPAddress]);
-            IPAddressAsLong += (partIPAddressAsInt * Math.pow(256, (3 - numberPartIPAddress)));
+            ipAddressAsLong += (partIPAddressAsInt * Math.pow(256, (3 - numberPartIPAddress)));
         }
-        return IPAddressAsLong;
+        return ipAddressAsLong;
     }
 
     /**
@@ -86,7 +87,7 @@ public class IPCounter {
      *
      * @return count unique number of IP Addresses
      */
-    public int count() {
-        return this.theFirstSet.cardinality() + this.theSecondSet.cardinality();
+    public long count() {
+        return (long) this.theFirstSet.cardinality() + (long) this.theSecondSet.cardinality();
     }
 }

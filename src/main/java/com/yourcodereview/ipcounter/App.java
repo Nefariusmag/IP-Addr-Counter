@@ -1,4 +1,4 @@
-package app;
+package com.yourcodereview.ipcounter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,22 +14,18 @@ import java.net.Inet4Address;
  */
 public class App
 {
+    private static final int NUMBER_ARGUMENTS_FOR_ENABLE_IP_VALIDATE = 2;
     public static void main( String[] args ) {
 
-        int lengthArgs = args.length;
-        if (lengthArgs < 1 || lengthArgs > 2) {
-            System.out.println("Need only two argument: the first with path to file with IP Addresses " +
-                    "and the second with True or False to enable or disable validate IP addresses " +
-                    "(All argument with wrong value will be converted to False");
+        if (!validateLengthArguments(args.length))
             System.exit(1);
-        }
 
-        String sourceFileName = args[0];
         boolean validateTrue = false;
-        if (args.length == 2)
+        if (args.length == NUMBER_ARGUMENTS_FOR_ENABLE_IP_VALIDATE)
             validateTrue = Boolean.parseBoolean(args[1]);
 
         long start = System.currentTimeMillis();
+        String sourceFileName = args[0];
         try {
             System.out.println("Distinct IP Addresses: "
                     + getCountIPAddressFromFileByBitSet(sourceFileName, validateTrue));
@@ -47,18 +43,16 @@ public class App
      * @param validateTrue enable or disable validating IP address
      * @throws IOException when have problem with access to the file
      */
-    public static int getCountIPAddressFromFileByBitSet(String path, boolean validateTrue) throws IOException {
+    public static long getCountIPAddressFromFileByBitSet(String path, boolean validateTrue) throws IOException {
         IPCounter counter = new IPCounter();
         BufferedReader reader = Files.newBufferedReader(Paths.get(path));
         String ipAddress;
         int countSkippedLines = 0;
         int countWrongIPAddresses = 0;
         while ((ipAddress = reader.readLine()) != null) {
-            if (validateTrue) {
-                if (!thisIsTrueIPAddress(ipAddress)) {
-                    countWrongIPAddresses++;
-                    continue;
-                }
+            if (validateTrue && !thisIsTrueIPAddress(ipAddress)) {
+                countWrongIPAddresses++;
+                continue;
             }
             try {
                 counter.add(ipAddress);
@@ -66,6 +60,7 @@ public class App
                 countSkippedLines++;
             }
         }
+        reader.close();
         if (countSkippedLines != 0) {
             System.out.println("Number lines couldn't be parsed: " + countSkippedLines);
         }
@@ -76,15 +71,32 @@ public class App
     }
 
     /**
+     * Validate number arguments for the application, check have argument for path to file
+     * and for enable/disable validate IP (optional)
+     *
+     * @param lengthArg number arguments for the application
+     * @return have enough arguments or not
+     */
+    public static boolean validateLengthArguments(int lengthArg) {
+        if (lengthArg < 1 || lengthArg > 2) {
+            System.out.println("Need only two argument: the first with path to file with IP Addresses " +
+                    "and the second with True or False to enable or disable validate IP addresses " +
+                    "(All argument with wrong value will be converted to False");
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Validate IP address is true or not.
      *
-     * @param IPAddress the one IP address want to check
+     * @param ipAddress the one IP address want to check
      * @return the IP address is true or not
      */
-    public static boolean thisIsTrueIPAddress(String IPAddress) {
+    public static boolean thisIsTrueIPAddress(String ipAddress) {
         try {
-            return Inet4Address.getByName(IPAddress)
-                    .getHostAddress().equals(IPAddress);
+            return Inet4Address.getByName(ipAddress)
+                    .getHostAddress().equals(ipAddress);
         }
         catch (UnknownHostException ex) {
             return false;

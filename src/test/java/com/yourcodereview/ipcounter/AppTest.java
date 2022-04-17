@@ -1,4 +1,4 @@
-package app;
+package com.yourcodereview.ipcounter;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -53,8 +53,8 @@ public class AppTest
      */
     @Test
     void countingUniqueIPAddressTest() throws IOException {
-        assertEquals(5, App.getCountIPAddressFromFileByBitSet("src/test/resources/list_ip.txt", true));
-        assertEquals(6, App.getCountIPAddressFromFileByBitSet("src/test/resources/list_ip.txt", false));
+        assertEquals(6, App.getCountIPAddressFromFileByBitSet("src/test/resources/list_ip.txt", true));
+        assertEquals(7, App.getCountIPAddressFromFileByBitSet("src/test/resources/list_ip.txt", false));
     }
 
     /**
@@ -62,8 +62,6 @@ public class AppTest
      */
     @Test
     void fileIsNotExistTest() {
-        assertThrows(NoSuchFileException.class, () -> {
-            App.getCountIPAddressFromFileByBitSet("src/test/resources/la-la-la.txt", true);
-        });
+        assertThrows(NoSuchFileException.class, () -> App.getCountIPAddressFromFileByBitSet("src/test/resources/la-la-la.txt", true));
     }
 }
